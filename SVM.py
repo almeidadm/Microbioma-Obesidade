@@ -56,7 +56,7 @@ if __name__ == '__main__':
     print(label)
 
 
-def banana():
+def depoiss():
     dataset = []
     print(dataset[0][-1])
     for i in range(len(dataset[0]) - 1):
