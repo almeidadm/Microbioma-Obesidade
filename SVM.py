@@ -89,8 +89,6 @@ if __name__ == '__main__':
     # predizendo para o dataset
     y_pred = clf.predict(data_test)
 
-    # print(y_pred)
-
     print("Accuracy: ", metrics.accuracy_score(label_test, y_pred))
     print("Precision (average=macro): ", metrics.precision_score(label_test, y_pred, average='macro'))
     print("Recall (average=macro): ", metrics.recall_score(label_test, y_pred, average='macro'))
