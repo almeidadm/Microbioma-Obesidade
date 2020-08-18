@@ -95,7 +95,7 @@ if __name__ == '__main__':
     # Para predições binárias
     #print("Precision: ", metrics.precision_score(label_test, y_pred))
     #print("Recall: ", metrics.recall_score(label_test, y_pred))
-    print("\nConfusion Matrix:\n", confusion_matrix(label_test, y_pred))
+    print("Confusion Matrix:\n", confusion_matrix(label_test, y_pred))
 
     stop = timeit.default_timer()
     print('\nTime: ', stop - start)
