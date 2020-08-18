@@ -92,9 +92,8 @@ if __name__ == '__main__':
     # print(y_pred)
 
     print("Accuracy: ", metrics.accuracy_score(label_test, y_pred))
-    # Para predições binárias
-    #print("Precision: ", metrics.precision_score(label_test, y_pred))
-    #print("Recall: ", metrics.recall_score(label_test, y_pred))
+    print("Precision (average=macro): ", metrics.precision_score(label_test, y_pred, average='macro'))
+    print("Recall (average=macro): ", metrics.recall_score(label_test, y_pred, average='macro'))
     print("Confusion Matrix:\n", confusion_matrix(label_test, y_pred))
 
     stop = timeit.default_timer()
