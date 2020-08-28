@@ -1,10 +1,10 @@
 import pandas as pd
 import timeit
+from statistics import mean
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
-
 
 
 # importar dados formato csv/data
@@ -32,7 +32,7 @@ def str_column_to_float(dataset, column):
 
 
 # transformar colunas de string para Int
-def strColumn_toInt(dataset, column):
+def str_column_to_int(dataset, column):
     class_values = [row[column] for row in dataset]
     unique = set(class_values)
     lookup = dict()
@@ -43,6 +43,7 @@ def strColumn_toInt(dataset, column):
         row[column] = lookup[row[column]]
     return lookup
 
+
 if __name__ == '__main__':
     start = timeit.default_timer()
 
@@ -51,27 +52,32 @@ if __name__ == '__main__':
     for i in range(1, len(dataset[0])):
         str_column_to_float(dataset, i)
 
-    strColumn_toInt(dataset, 0)
+    str_column_to_int(dataset, 0)
 
     dataset, label = split_label(dataset, 0)
     # dividindo dataset em treino e teste
-    data_train, data_test, label_train, label_test = train_test_split(dataset, label, test_size=0.3)
 
-    # criando um classificador svm
-    clf = svm.SVC(kernel='linear')
+    accuracy_scores = list()
+    regularization = [pow(2, -i) for i in range(15)]
+    for i in range(3):
+        regularization.append(pow(2, i))
+    for i in regularization:
+        data_train, data_test, label_train, label_test = train_test_split(dataset, label, test_size=0.3)
 
-    # treinando o modelo usando os sets de treino
-    clf.fit(data_train, label_train)
+        # criando um classificador svm
+        clf = svm.SVC(C=i, kernel='rbf')
 
-    # predizendo para o dataset
-    y_pred = clf.predict(data_test)
+        # treinando o modelo usando os sets de treino
+        clf.fit(data_train, label_train)
 
-    print("Number of samples: ", len(dataset))
-    print("Number of features: ", len(dataset[0]))
-    print("Accuracy: ", metrics.accuracy_score(label_test, y_pred))
-    print("Precision (average=macro): ", metrics.precision_score(label_test, y_pred, average='macro'))
-    print("Recall (average=macro): ", metrics.recall_score(label_test, y_pred, average='macro'))
-    print("Confusion Matrix:\n", confusion_matrix(label_test, y_pred))
+        # predizendo para o dataset
+        y_pred = clf.predict(data_test)
 
+        accuracy_scores.append((metrics.accuracy_score(label_test, y_pred), i))
+        # print("Confusion Matrix:\n", confusion_matrix(label_test, y_pred))
+
+    accuracy_scores.sort()
+    print("\nMean accuracy score: ", mean([i[0] for i in accuracy_scores]))
+    print("Highest accuracy score: ", accuracy_scores[-1][0], "with C=", accuracy_scores[-1][1])
     stop = timeit.default_timer()
     print('\nTime: ', stop - start)
