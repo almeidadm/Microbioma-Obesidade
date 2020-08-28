@@ -2,12 +2,10 @@
 def format(data):
     data = data.split('\n')
     data = data[:-1]
-
     for i in range(len(data)):
         data[i] = data[i].split('\t')
 
     feature = []
-    feature.append(data[0][0])
     feature.append(data[1][0])
     feature.append(data[4][0])
     for i in range(211,len(data)):
@@ -28,25 +26,22 @@ def format(data):
     obesity = []
     for i in range(len(samples)):
         if samples[i][0] == 'Chatelier_gut_obesity':
-            obesity.append(samples[i])
+            obesity.append(samples[i][1:])
 
     return feature, obesity
 
 
 if __name__ == '__main__':
     file = open('./data/abundance.txt', 'r')
-    feature, obesity = format(file.read())
+    feature, data = format(file.read())
     file.close()
-
-    for i in range(len(feature)):
-       print(i, feature[i], obesity[0][i])
 
     new_data = open('./data/obesity_abundance.txt', 'w+')
 
     for i in range(len(feature)):
         line = str(feature[i]) + ','
-        for j in range(len(obesity)):
-            line += str(obesity[j][i]) + ','
+        for j in range(len(data)):
+            line += str(data[j][i]) + ','
         line += '\n'
         new_data.write(line)
 
